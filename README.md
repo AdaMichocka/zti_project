@@ -1,1 +1,1 @@
-Uni project to learn SPARQL and NLP.
+Uni project to learn SPARQL, NLP and Semantic Web.
