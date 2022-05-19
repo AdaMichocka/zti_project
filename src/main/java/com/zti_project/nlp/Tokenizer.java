@@ -22,7 +22,7 @@ public class Tokenizer {
      * @param sentence
      * @return String[]
      */
-    public List<String> tokenizeSentence(String sentence) {
+    public String[] tokenizeSentence(String sentence) {
         InputStream inputStream = getClass()
                 .getResourceAsStream("/models/en-token.bin");
         TokenizerModel model = null;
@@ -33,7 +33,7 @@ public class Tokenizer {
         }
         TokenizerME tokenizer = new TokenizerME(model);
 
-        return List.of(tokenizer.tokenize(sentence));
+        return tokenizer.tokenize(sentence);
     }
 
 

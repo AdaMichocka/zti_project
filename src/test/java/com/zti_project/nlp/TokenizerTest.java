@@ -18,11 +18,10 @@ public class TokenizerTest {
     @Test
     public void shouldTokenizeSentence() {
         String sentence = "Google CEO Sundar Pichai responded today to the firing of employee James Damore over his controversial memo on workplace diversity.";
-        List<String> res = new ArrayList<>();
 
-        res = tokenizer.tokenizeSentence(sentence);
+        String[] res = tokenizer.tokenizeSentence(sentence);
 
-        assertEquals(21, res.size());
+        assertEquals(21, res.length);
     }
 
 }
