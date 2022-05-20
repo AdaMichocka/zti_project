@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +33,13 @@ public class ModelController {
         }
 
         // TODO: Rozbijac txt od uzytkownika + zwracać listę ResponseModel
-        return ResponseEntity.ok(List.of(sparqlQuery.createQuery(txt, requestModel.getLang())));
+        List<String> extractedWords = Arrays.asList("Donald_Trump", "Adam_Małysz");
+
+        List<ResponseModel> responseModelList = new ArrayList<>();
+        for (var word : extractedWords) {
+            responseModelList.add(sparqlQuery.createQuery(word, requestModel.getLang()));
+        }
+
+        return ResponseEntity.ok(responseModelList);
     }
 }
