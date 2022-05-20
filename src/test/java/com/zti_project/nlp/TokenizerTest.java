@@ -1,22 +1,20 @@
 package com.zti_project.nlp;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Captor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 
-
+/**
+ * @author Ada
+ */
 public class TokenizerTest {
 
     Tokenizer tokenizer = new Tokenizer();
 
     @Test
-    public void shouldTokenizeSentence() {
+    public void shouldTokenizeSentence() throws IOException {
         String sentence = "Google CEO Sundar Pichai responded today to the firing of employee James Damore over his controversial memo on workplace diversity.";
 
         String[] res = tokenizer.tokenizeSentence(sentence);
