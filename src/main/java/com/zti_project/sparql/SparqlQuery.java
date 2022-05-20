@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.*;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +33,9 @@ public class SparqlQuery {
      * @param resource resource to search for e.g. Donald_Trump
      * @param lang label language
      *
-     * @return list of {@link ResponseModel}
+     * @return {@link ResponseModel}
      */
-    public List<ResponseModel> createQuery(String resource, LanguageEnum lang) {
+    public ResponseModel createQuery(String resource, LanguageEnum lang) {
 
         ParameterizedSparqlString sparqlString = getSparqlWithPrefixes();
 
@@ -56,24 +57,27 @@ public class SparqlQuery {
      * @param resultSet resultSet from query
      * @param resource resource to search for e.g. Donald_Trump
      * @param language {@link LanguageEnum}
-     * @return list of {@link ResponseModel}
+     * @return {@link ResponseModel}
      */
-    private List<ResponseModel> retrieveFromResult(ResultSet resultSet, String resource, LanguageEnum language) {
-        List<ResponseModel> modelList = new ArrayList<>();
+    private ResponseModel retrieveFromResult(ResultSet resultSet, String resource, LanguageEnum language) {
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.setLanguage(language);
+        responseModel.setResource(resource);
+        responseModel.setResourceUri(MessageFormat.format("http://dbpedia.org/resource/{0}", resource));
+        List<TypeModel> typeModels = new ArrayList<>();
 
         while (resultSet.hasNext()) {
-            ResponseModel responseModel = new ResponseModel();
             var next = resultSet.next();
-            responseModel.setTypeUri(retrieveProperty(next,"type"));
-            responseModel.setLabel(retrieveProperty(next,"label")
+            TypeModel typeModel = new TypeModel();
+            typeModel.setTypeUri(retrieveProperty(next,"type"));
+            typeModel.setLabel(retrieveProperty(next,"label")
                     .replace(language.getLang(), StringUtils.EMPTY));
-            responseModel.setLanguage(language);
-            responseModel.setResource(resource);
-            responseModel.setResourceUri(MessageFormat.format("http://dbpedia.org/resource/{0}", resource));
-            modelList.add(responseModel);
+
+            typeModels.add(typeModel);
         }
 
-        return modelList;
+        responseModel.setTypeModel(typeModels);
+        return responseModel;
     }
 
     /**

@@ -25,10 +25,6 @@ public class Main {
         // 5. zapytanie sparql na podstawie pojęć z listy
         //6. zapytanie do dbpedii
         // odpowiedź zapisywana jest w stringu
-
-        SparqlQuery sparqlQuery = new SparqlQuery();
-        sparqlQuery.createQuery("Google", LanguageEnum.EN);
-
     }
 
     @Bean
