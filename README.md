@@ -8,3 +8,5 @@ and Linking) and Task 3 (Relation Extraction).
 The request data consists of documents with sentences. A participating
 system is expected to respond with named entities found in the documents,
 with the linking to DBpedia as well as with relations between the entities.
+
+http://localhost:8080/swagger-ui.html# - swagger
