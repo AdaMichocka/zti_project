@@ -1,9 +1,9 @@
 package com.zti_project;
 
+import com.zti_project.sparql.LanguageEnum;
+import com.zti_project.sparql.SparqlQuery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Scanner;
 
 @SpringBootApplication
 public class Main {
@@ -20,8 +20,8 @@ public class Main {
         //6. zapytanie do dbpedii
         // odpowiedź zapisywana jest w stringu
 
-        String inputText = "";
-        Scanner scanner = new Scanner(System.in);
+        SparqlQuery sparqlQuery = new SparqlQuery();
+        sparqlQuery.createQuery("Google", LanguageEnum.EN);
 
     }
 }
