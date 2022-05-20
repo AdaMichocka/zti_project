@@ -2,11 +2,13 @@ package com.zti_project.sparql;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.*;
+import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class SparqlQuery {
     private static final String ENDPOINT = "http://dbpedia.org/sparql";
 
