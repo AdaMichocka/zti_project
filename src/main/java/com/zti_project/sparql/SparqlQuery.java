@@ -1,10 +1,12 @@
 package com.zti_project.sparql;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.query.*;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ public class SparqlQuery {
 
     /**
      * Get sparql with common prefixes
+     *
      * @return sparql with common prefixes
      */
     private ParameterizedSparqlString getSparqlWithPrefixes() {
@@ -30,9 +33,9 @@ public class SparqlQuery {
 
     /**
      * create query
-     * @param resource resource to search for e.g. Donald_Trump
-     * @param lang label language
      *
+     * @param resource resource to search for e.g. Donald_Trump
+     * @param lang     label language
      * @return {@link ResponseModel}
      */
     public ResponseModel createQuery(String resource, LanguageEnum lang) {
@@ -53,10 +56,9 @@ public class SparqlQuery {
     }
 
     /**
-     *
      * @param resultSet resultSet from query
-     * @param resource resource to search for e.g. Donald_Trump
-     * @param language {@link LanguageEnum}
+     * @param resource  resource to search for e.g. Donald_Trump
+     * @param language  {@link LanguageEnum}
      * @return {@link ResponseModel}
      */
     private ResponseModel retrieveFromResult(ResultSet resultSet, String resource, LanguageEnum language) {
@@ -69,8 +71,8 @@ public class SparqlQuery {
         while (resultSet.hasNext()) {
             var next = resultSet.next();
             TypeModel typeModel = new TypeModel();
-            typeModel.setTypeUri(retrieveProperty(next,"type"));
-            typeModel.setLabel(retrieveProperty(next,"label")
+            typeModel.setTypeUri(retrieveProperty(next, "type"));
+            typeModel.setLabel(retrieveProperty(next, "label")
                     .replace(language.getLang(), StringUtils.EMPTY));
 
             typeModels.add(typeModel);
@@ -82,8 +84,9 @@ public class SparqlQuery {
 
     /**
      * Retrieve property by key
+     *
      * @param querySolution query
-     * @param property key
+     * @param property      key
      * @return value if exists
      */
     private String retrieveProperty(QuerySolution querySolution, String property) {
