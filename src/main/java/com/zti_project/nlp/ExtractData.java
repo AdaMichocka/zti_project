@@ -1,9 +1,8 @@
 package com.zti_project.nlp;
 
 import opennlp.tools.util.Span;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +10,7 @@ import java.util.List;
  *
  * @author Ada
  */
+@Service
 public class ExtractData {
 
     Tokenizer tokenizer = new Tokenizer();
