@@ -22,41 +22,93 @@ public class NamedEntityRecognizer {
     public NamedEntityRecognizer() {
     }
 
-    public Span[] getPersonNers(String[] tokens) throws Exception {
+    /**
+     * Get NERs basing on trained models
+     *
+     * @param tokens
+     * @return spans array
+     * @throws Exception
+     */
+    public Span[] getAllNers(String[] tokens) throws Exception {
+        List<Span> allSpans = new ArrayList<>();
 
-        InputStream inputStreamNameFinder = getClass()
+        InputStream inputStreamPersonNameFinder = getClass()
                 .getResourceAsStream("/models/en-ner-person.bin");
-        TokenNameFinderModel model = new TokenNameFinderModel(inputStreamNameFinder);
-        NameFinderME nameFinderME = new NameFinderME(model);
-        return nameFinderME.find(tokens);
+        TokenNameFinderModel personModel = new TokenNameFinderModel(inputStreamPersonNameFinder);
+        NameFinderME namePersonFinderME = new NameFinderME(personModel);
+
+        InputStream inputStreamLocationNameFinder = getClass()
+                .getResourceAsStream("/models/en-ner-location.bin");
+        TokenNameFinderModel locationModel = new TokenNameFinderModel(inputStreamLocationNameFinder);
+        NameFinderME nameLocationFinderME = new NameFinderME(locationModel);
+
+        InputStream inputStreamDateNameFinder = getClass()
+                .getResourceAsStream("/models/en-ner-location.bin");
+        TokenNameFinderModel dateModel = new TokenNameFinderModel(inputStreamDateNameFinder);
+        NameFinderME nameDateFinderME = new NameFinderME(dateModel);
+
+        InputStream inputStreamMoneyNameFinder = getClass()
+                .getResourceAsStream("/models/en-ner-location.bin");
+        TokenNameFinderModel moneyModel = new TokenNameFinderModel(inputStreamMoneyNameFinder);
+        NameFinderME nameMoneyFinderME = new NameFinderME(moneyModel);
+
+        InputStream inputStreamOrganizationNameFinder = getClass()
+                .getResourceAsStream("/models/en-ner-location.bin");
+        TokenNameFinderModel organizationModel = new TokenNameFinderModel(inputStreamOrganizationNameFinder);
+        NameFinderME nameOrganizationFinderME = new NameFinderME(organizationModel);
+
+        InputStream inputStreamPercentageNameFinder = getClass()
+                .getResourceAsStream("/models/en-ner-location.bin");
+        TokenNameFinderModel percentageModel = new TokenNameFinderModel(inputStreamPercentageNameFinder);
+        NameFinderME namePercentageFinderME = new NameFinderME(percentageModel);
+
+        InputStream inputStreamTimeNameFinder = getClass()
+                .getResourceAsStream("/models/en-ner-location.bin");
+        TokenNameFinderModel timeModel = new TokenNameFinderModel(inputStreamTimeNameFinder);
+        NameFinderME nameTimeFinderME = new NameFinderME(timeModel);
+
+        allSpans.addAll(List.of(namePersonFinderME.find(tokens)));
+        allSpans.addAll(List.of(nameLocationFinderME.find(tokens)));
+        allSpans.addAll(List.of(nameDateFinderME.find(tokens)));
+        allSpans.addAll(List.of(nameMoneyFinderME.find(tokens)));
+        allSpans.addAll(List.of(nameOrganizationFinderME.find(tokens)));
+        allSpans.addAll(List.of(namePercentageFinderME.find(tokens)));
+        allSpans.addAll(List.of(nameTimeFinderME.find(tokens)));
+
+        return allSpans.toArray(Span[]::new);
     }
 
 
-    public String[] add_toMultipleWrodSpan(String[] tokens, Span[] ners) {
-        String[] result;
-        List<String> tempList = new ArrayList<>();
+    /**
+     * Concat multiple words spans and add them to token list
+     *
+     * @param tokens
+     * @param ners
+     * @return string array with concatenated multiple words spans
+     */
+    public String[] add_toMultipleWordsSpan(String[] tokens, Span[] ners) {
+        List<String> tokenList = new ArrayList<>(List.of(tokens));
+        List<String> concatPersons = new ArrayList<>();
+        List<String> tokensToRemove = new ArrayList<>();
 
         for (Span s : ners) {
             List<String> temp = new ArrayList<>();
             // s.getStart() : contains the start index of possible name in the input string array
             // s.getEnd() : contains the end index of the possible name in the input string array
-            for (int index = s.getStart(); index < s.getEnd(); index++) {
-                temp.add(tokens[index]);
-                System.out.print(tokens[index] + " ");
-            }
-            if (temp.size()>1){
+            temp.addAll(Arrays.asList(tokens).subList(s.getStart(), s.getEnd()));
+            if (temp.size() > 1) {
                 StringJoiner stringJoiner = new StringJoiner("_");
-                for (int i = 0; i<temp.size();i++){
-                    stringJoiner.add(temp.get(i));
+                for (String value : temp) {
+                    tokensToRemove.add(value);
+                    stringJoiner.add(value);
                 }
-                tempList.add(stringJoiner.toString());
+                concatPersons.add(stringJoiner.toString());
                 stringJoiner = null;
             }
-
-
         }
-
-        return null;
+        tokenList.removeAll(tokensToRemove);
+        tokenList.addAll(concatPersons);
+        return tokenList.toArray(String[]::new);
     }
 
 

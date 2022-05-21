@@ -15,23 +15,22 @@ public class ExtractData {
 
     Tokenizer tokenizer = new Tokenizer();
     NamedEntityRecognizer ner = new NamedEntityRecognizer();
+    PartOfSpeech pos = new PartOfSpeech();
 
     public ExtractData() {
     }
 
-    public List<String> extractData(String sentence) throws IOException {
-        List<String> resultList = new ArrayList<>();
+    public List<String> extractData(String sentence) throws Exception {
 
         String[] tokens = tokenizer.tokenizeSentence(sentence);
-        //ner
+        Span[] ners = ner.getAllNers(tokens);
+        String[] spansWith_between = ner.add_toMultipleWordsSpan(tokens, ners);
+        //pos
 
-        return resultList;
+        return List.of(spansWith_between);
     }
 
     //TODO
     //rozpoznawanie czasownik/rzeczownik etc i wywalenie czasowników
-    //kategorie
-
-
 
 }

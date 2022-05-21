@@ -18,7 +18,7 @@ public class Tokenizer {
      * Split sentence into array of tokens
      *
      * @param sentence
-     * @return String[]
+     * @return string array with result words
      */
     public String[] tokenizeSentence(String sentence) throws IOException {
 
@@ -33,7 +33,7 @@ public class Tokenizer {
      * example: []()/\,.-!@#$^&*;"'
      *
      * @param sentence
-     * @return
+     * @return string array without special characters
      */
     private String[] removeSpecialCharsAndTokenize(String sentence) {
         return sentence.replaceAll("[^a-zA-Z ]", "").split("\\s+");
@@ -44,10 +44,9 @@ public class Tokenizer {
      * example: and, of, a
      *
      * @param tokens
-     * @return
+     * @return string array without stop words
      */
     private String[] removeStopWords(String[] tokens) throws IOException {
-        // List<String> stopWords = Files.readAllLines(Paths.get("/english_stopwords.txt"));
         Scanner s = new Scanner(new File("src/main/resources/english_stopwords.txt"));
         ArrayList<String> stopWords = new ArrayList<String>();
         while (s.hasNext()) {
