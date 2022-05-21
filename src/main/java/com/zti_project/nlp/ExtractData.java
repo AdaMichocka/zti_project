@@ -2,9 +2,9 @@ package com.zti_project.nlp;
 
 import opennlp.tools.util.Span;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Extracting and processing of data from given sentence.
@@ -20,17 +20,42 @@ public class ExtractData {
     public ExtractData() {
     }
 
+    /**
+     * Extracting data method:
+     * 1. tokenizes sentence
+     * 2. finds NERs - categories
+     * 3. concats multiple words spans e.g. John Smith -> John_Smith
+     * 4. removes duplicates
+     * 5. removes special characters
+     * 6. detect and delete part of speech e.g. verbs
+     *
+     * @param sentence
+     * @return list of tokens
+     * @throws Exception
+     */
     public List<String> extractData(String sentence) throws Exception {
 
         String[] tokens = tokenizer.tokenizeSentence(sentence);
+
         Span[] ners = ner.getAllNers(tokens);
         String[] spansWith_between = ner.add_toMultipleWordsSpan(tokens, ners);
-        //pos
+        String[] tokensWithoutDuplicates = removeDuplicated(spansWith_between);
+        String[] tokensWithousSpecialChars = tokenizer.removeSpecialCharsAndTokenize(tokensWithoutDuplicates);
+        List<String> tokensReadyToQuer = pos.identifyAndDeletePartsOfSpeech(tokensWithousSpecialChars);
 
-        return List.of(spansWith_between);
+        return tokensReadyToQuer;
     }
 
-    //TODO
-    //rozpoznawanie czasownik/rzeczownik etc i wywalenie czasowników
+    /**
+     * removes duplicates from list
+     *
+     * @param tokens
+     * @return list without duplicates
+     */
+    private String[] removeDuplicated(String[] tokens) {
+        List<String> tokenList = new ArrayList<>(List.of(tokens));
+        tokenList.stream().distinct().collect(Collectors.toList());
+        return tokenList.toArray(String[]::new);
+    }
 
 }

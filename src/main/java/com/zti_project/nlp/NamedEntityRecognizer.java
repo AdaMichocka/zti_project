@@ -4,7 +4,6 @@ import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.util.Span;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,27 +42,27 @@ public class NamedEntityRecognizer {
         NameFinderME nameLocationFinderME = new NameFinderME(locationModel);
 
         InputStream inputStreamDateNameFinder = getClass()
-                .getResourceAsStream("/models/en-ner-location.bin");
+                .getResourceAsStream("/models/en-ner-date.bin");
         TokenNameFinderModel dateModel = new TokenNameFinderModel(inputStreamDateNameFinder);
         NameFinderME nameDateFinderME = new NameFinderME(dateModel);
 
         InputStream inputStreamMoneyNameFinder = getClass()
-                .getResourceAsStream("/models/en-ner-location.bin");
+                .getResourceAsStream("/models/en-ner-money.bin");
         TokenNameFinderModel moneyModel = new TokenNameFinderModel(inputStreamMoneyNameFinder);
         NameFinderME nameMoneyFinderME = new NameFinderME(moneyModel);
 
         InputStream inputStreamOrganizationNameFinder = getClass()
-                .getResourceAsStream("/models/en-ner-location.bin");
+                .getResourceAsStream("/models/en-ner-organization.bin");
         TokenNameFinderModel organizationModel = new TokenNameFinderModel(inputStreamOrganizationNameFinder);
         NameFinderME nameOrganizationFinderME = new NameFinderME(organizationModel);
 
         InputStream inputStreamPercentageNameFinder = getClass()
-                .getResourceAsStream("/models/en-ner-location.bin");
+                .getResourceAsStream("/models/en-ner-percentage.bin");
         TokenNameFinderModel percentageModel = new TokenNameFinderModel(inputStreamPercentageNameFinder);
         NameFinderME namePercentageFinderME = new NameFinderME(percentageModel);
 
         InputStream inputStreamTimeNameFinder = getClass()
-                .getResourceAsStream("/models/en-ner-location.bin");
+                .getResourceAsStream("/models/en-ner-time.bin");
         TokenNameFinderModel timeModel = new TokenNameFinderModel(inputStreamTimeNameFinder);
         NameFinderME nameTimeFinderME = new NameFinderME(timeModel);
 

@@ -1,12 +1,18 @@
 package com.zti_project.nlp;
 
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
+ * The goal of tokenization is to divide a sentence into smaller parts called tokens
+ *
  * @author Ada
  */
 public class Tokenizer {
@@ -15,38 +21,45 @@ public class Tokenizer {
     }
 
     /**
-     * Split sentence into array of tokens
+     * Split sentence into array of tokens and remove stopwords
      *
      * @param sentence
      * @return string array with result words
      */
     public String[] tokenizeSentence(String sentence) throws IOException {
 
-        String[] tokens = removeSpecialCharsAndTokenize(sentence);
-        String[] result = removeStopWords(tokens);
+        InputStream inputStream = getClass()
+                .getResourceAsStream("/models/en-token.bin");
+        TokenizerModel model = new TokenizerModel(inputStream);
+        TokenizerME tokenizer = new TokenizerME(model);
+        String[] tokens = tokenizer.tokenize(sentence);
 
-        return result;
+        return removeStopWords(tokens);
     }
 
     /**
      * Removes tokens which are special characters
      * example: []()/\,.-!@#$^&*;"'
      *
-     * @param sentence
+     * @param tokens
      * @return string array without special characters
      */
-    private String[] removeSpecialCharsAndTokenize(String sentence) {
-        return sentence.replaceAll("[^a-zA-Z ]", "").split("\\s+");
+    protected String[] removeSpecialCharsAndTokenize(String[] tokens) {
+        List<String> tokenList = new ArrayList<>(List.of(tokens));
+        List<String> specialChars = List.of("[", "]", "(", ")", "/", "\\", ",", ".", "-", "!", "@", "#", "$", "^", "&", "*", ";", "\"", "'");
+        tokenList.removeAll(specialChars);
+        return tokenList.toArray(String[]::new);
     }
 
+
     /**
-     * Removes eng stop words
+     * Removes eng stopwords
      * example: and, of, a
      *
      * @param tokens
-     * @return string array without stop words
+     * @return string array without stopwords
      */
-    private String[] removeStopWords(String[] tokens) throws IOException {
+    protected String[] removeStopWords(String[] tokens) throws IOException {
         Scanner s = new Scanner(new File("src/main/resources/english_stopwords.txt"));
         ArrayList<String> stopWords = new ArrayList<String>();
         while (s.hasNext()) {
