@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class SparqlQuery {
@@ -39,6 +40,7 @@ public class SparqlQuery {
      * @return {@link ResponseModel}
      */
     public ResponseModel createQuery(String resource, LanguageEnum lang) {
+        resource = resource.substring(0,1).toUpperCase(Locale.ROOT) + resource.substring(1).toLowerCase(Locale.ROOT);
 
         ParameterizedSparqlString sparqlString = getSparqlWithPrefixes();
 
